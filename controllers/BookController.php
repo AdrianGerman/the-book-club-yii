@@ -11,7 +11,7 @@ class BookController extends Controller
     public function actionAll()
     {
         $books = Book::find()->all();
-        return serialize($books);
+        return $this->render('all.tpl', ['books' => $books]);
     }
 
     public function actionDetail($id)
