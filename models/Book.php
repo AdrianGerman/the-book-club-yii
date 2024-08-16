@@ -16,8 +16,13 @@ class Book extends ActiveRecord
         return $this->book_id;
     }
 
+    public function getAuthor()
+    {
+        return $this->hasOne(Author::class, ["author_id" => "author_id"])->one();
+    }
+
     public function toString()
     {
-        return sprintf("(%d) %s", $this->id, strtoupper($this->title));
+        return sprintf("(%d) %s - %s", $this->id, $this->title, $this->getAuthor()->name);
     }
 }

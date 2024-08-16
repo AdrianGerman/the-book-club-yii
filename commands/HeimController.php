@@ -45,14 +45,27 @@ class HeimController extends Controller
         return ExitCode::OK;
     }
 
-    public function actionGetAuthor($author_id)
+    public function actionAuthor($author_id)
     {
         $author = Author::findOne($author_id);
         if (empty($author)) {
             printf("No existe el autor\n");
             return ExitCode::DATAERR;
         }
-        printf("Nombre: %s\n", $author->name);
+        printf("%s:\n", $author->toString());
+        foreach ($author->books as $book) {
+            printf(" - %s\n", $book->toString());
+        }
+        return ExitCode::OK;
+    }
+    public function actionBook($book_id)
+    {
+        $book = Book::findOne($book_id);
+        if (empty($book)) {
+            printf("No existe el libro \n");
+            return ExitCode::DATAERR;
+        }
+        printf("%s\n", $book->toString());
         return ExitCode::OK;
     }
 }
