@@ -22,6 +22,6 @@ class BookController extends Controller
             Yii::$app->session->setFlash("error", "Ese libro no existe");
             return $this->goHome();
         }
-        return $book->title;
+        return $book->toString();
     }
 }
