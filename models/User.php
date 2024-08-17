@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Exception;
 use yii\db\ActiveRecord;
 
 class User extends ActiveRecord implements \yii\web\IdentityInterface
@@ -15,6 +16,10 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     */
 
 
+    public static function tableName()
+    {
+        return 'users';
+    }
 
     /**
      * {@inheritdoc}
@@ -92,6 +97,16 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
 
     public function ofuscatePassword($password)
     {
+        if (empty(getenv('salt'))) {
+            throw new Exception('no salt');
+        }
         return md5(sprintf('%s-%s-%s', $password, $this->username, getenv('salt')));
+    }
+    public function beforeSave($insert)
+    {
+        if ($insert == true) {
+            $this->password = $this->ofuscatePassword($this->password);
+        }
+        return parent::beforeSave($insert);
     }
 }
