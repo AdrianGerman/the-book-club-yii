@@ -27,10 +27,16 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             [['username', 'password',], 'required'],
-            ['bio', 'default'],
+            ['username', 'filter', 'filter' => function ($v) {
+                $v = ltrim(rtrim($v));
+                $v = strtolower($v);
+                return $v;
+            }],
+            ['username', 'unique'],
             ['username', 'string', 'length' => [4, 100]],
             ['password', 'compare'],
             ['password_repeat', 'default'],
+            ['bio', 'default'],
         ];
     }
 

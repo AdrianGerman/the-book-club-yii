@@ -30,6 +30,7 @@ class UserController extends Controller
                 }
             }
             $user->password = "";
+            $user->password_repeat = "";
         }
         return $this->render('new.tpl', ['user' => $user]);
     }
