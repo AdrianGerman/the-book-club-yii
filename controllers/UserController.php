@@ -11,6 +11,10 @@ class UserController extends Controller
 {
     public function actionNew()
     {
+        if (!Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash("warning", "No puedes crear usuarios estando logeado");
+            return $this->goHome();
+        }
         $user = new User;
         if ($user->load(Yii::$app->request->post())) {
             // hay algo en POST
@@ -25,6 +29,7 @@ class UserController extends Controller
                     return;
                 }
             }
+            $user->password = "";
         }
         return $this->render('new.tpl', ['user' => $user]);
     }
