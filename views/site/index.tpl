@@ -12,3 +12,5 @@
 
 <p>Hay {$book_count} libros en el sistema</p>
 
+<p>{Html::a('Crear libro', ['book/new'])}</p>
+

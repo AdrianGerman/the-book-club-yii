@@ -16,6 +16,19 @@ class Book extends ActiveRecord
         return $this->book_id;
     }
 
+    public function attributeLabels()
+    {
+        return ["title" => "Título"];
+    }
+
+    public function rules()
+    {
+        return [
+            [["title", "author_id"], "required"],
+            ["author_id", "integer"]
+        ];
+    }
+
     public function getAuthor()
     {
         return $this->hasOne(Author::class, ["author_id" => "author_id"])->one();

@@ -24,4 +24,22 @@ class BookController extends Controller
         }
         return $book->toString();
     }
+
+    public function actionNew()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        $book = new Book;
+
+        if ($book->load(Yii::$app->request->post())) {
+            if ($book->validate()) {
+                if ($book->save()) {
+                    Yii::$app->session->setFlash("success", "Libro creado");
+                    return $this->redirect(["book/all"]);
+                }
+            }
+        }
+        return $this->render("form.tpl", ["book" => $book]);
+    }
 }
