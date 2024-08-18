@@ -1,7 +1,14 @@
 {use class="yii\helpers\Html"}
+{use class="Yii"}
+
 {title}{$book->title}{/title}
 <h1>{$this->title}</h1>
 
 <p>Un libro de {$book->author->name}.</p>
 
-<p>{Html::a("Tengo este libro!", ["book/i-own-this-book", "book_id" => $book->id])}</p>
+{if Yii::$app->user->identity->hasBook($book->id)}
+    {* {Html::a("Ya no lo tengo")} *}
+    Ya tienes este libro en tu biblioteca
+{else}
+    <p>{Html::a("Añadir libro!", ["book/i-own-this-book", "book_id" => $book->id])}</p>
+{/if}

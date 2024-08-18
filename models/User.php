@@ -136,11 +136,24 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         }
         return md5(sprintf('%s-%s-%s', $password, $this->username, getenv('salt')));
     }
+
     public function beforeSave($insert)
     {
         if ($insert == true) {
             $this->password = $this->ofuscatePassword($this->password);
         }
         return parent::beforeSave($insert);
+    }
+
+    public function hasBook($book_id): bool
+    {
+        $ub = UserBook::find()->where([
+            "user_id" => $this->id,
+            "book_id" => $book_id
+        ])->all();
+        if (empty($ub)) {
+            return false;
+        }
+        return true;
     }
 }
