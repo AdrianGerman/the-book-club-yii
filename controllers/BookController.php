@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use app\models\Book;
+use app\models\UserBook;
 
 class BookController extends Controller
 {
@@ -22,7 +23,7 @@ class BookController extends Controller
             Yii::$app->session->setFlash("error", "Ese libro no existe");
             return $this->goHome();
         }
-        return $book->toString();
+        return $this->render("detail.tpl", ["book" => $book]);
     }
 
     public function actionNew()
@@ -41,5 +42,18 @@ class BookController extends Controller
             }
         }
         return $this->render("form.tpl", ["book" => $book]);
+    }
+
+    public function actionIOwnThisBook($book_id)
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        $ub = new UserBook;
+        $ub->user_id = Yii::$app->user->identity->id;
+        $ub->book_id = $book_id;
+        $ub->save();
+        Yii::$app->session->setFlash("success", "Se ha agregado a tu biblioteca!");
+        return $this->redirect(["book/detail", "id" => $book_id]);
     }
 }
